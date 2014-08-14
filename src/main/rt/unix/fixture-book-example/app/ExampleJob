@@ -1,0 +1,5 @@
+#!/bin/sh
+
+cd `dirname $0`
+
+java -cp ./classes:./lib/* com.xpfriend.fixture.runner.example.ExampleJob "$@"

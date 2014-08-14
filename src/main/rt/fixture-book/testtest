@@ -1,0 +1,5 @@
+#!/bin/sh
+
+FIXTURE_BOOK_DIR=`dirname $0`;export FIXTURE_BOOK_DIR
+
+java -cp ./conf:./lib/*:$FIXTURE_BOOK_DIR/lib/* com.xpfriend.fixture.runner.Exec "$@"
