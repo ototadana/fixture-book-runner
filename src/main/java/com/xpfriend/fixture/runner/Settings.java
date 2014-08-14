@@ -23,10 +23,18 @@ import com.xpfriend.junk.Strings;
  * @author Ototadana
  */
 class Settings {
+	
+	static {
+		new Settings(); // for coverage
+	}
+	
+	private Settings() {
+	}
 
 	/**
 	 * サーバのポート番号を取得する。
-	 * @return 設定ファイルの "port" もしくは "com.xpfriend.fixture.runner.port" のいずれかで設定された値。
+	 * @return 設定ファイルの "port" もしくは 
+	 *         システムプロパティ  "com.xpfriend.fixture.runner.port" のいずれかで設定された値。
 	 *         デフォルトは 7878。
 	 */
 	public static int getPort() {
@@ -35,7 +43,8 @@ class Settings {
 
 	/**
 	 * テスト結果レポート出力先フォルダのパスを取得する。
-	 * @return 設定ファイルの "report" もしくは "com.xpfriend.fixture.runner.report" のいずれかで設定された値。
+	 * @return 設定ファイルの "report" もしくは 
+	 *         システムプロパティ  "com.xpfriend.fixture.runner.report" のいずれかで設定された値。
 	 *         デフォルトは "./reports"。
 	 */
 	public static String getReportPath() {
@@ -44,7 +53,8 @@ class Settings {
 	
 	/**
 	 * 別プロセスでテストを呼び出す際のワーキングディレクトリを取得する。
-	 * @return 設定ファイルの "directory" もしくは "com.xpfriend.fixture.runner.directory" のいずれかで設定された値。
+	 * @return 設定ファイルの "directory" もしくは 
+	 *         システムプロパティ  "com.xpfriend.fixture.runner.directory" のいずれかで設定された値。
 	 *         デフォルトは null。
 	 */
 	public static String getWorkingDirectory() {
@@ -54,14 +64,14 @@ class Settings {
 	/**
 	 * テスト実行ファイルを示すファイル拡張子を取得する。
 	 * @return テスト実行ファイルを示すファイル拡張子。設定ファイルの "executable" もしくは 
-	 *         "com.xpfriend.fixture.runner.executable" のいずれかで設定された値。
+	 *         システムプロパティ  "com.xpfriend.fixture.runner.executable" のいずれかで設定された値。
 	 *         セミコロンを区切り文字とする。
 	 *         デフォルトの設定は "Test.xlsx;Test;Test.sh;Test.bat;Test.cmd;Spec.xlsx;Spec;Spec.sh;Spec.bat;Spec.cmd"。
 	 */
 	public static String[] getExecutableFiles() {
 		return get("executable", "Test.xlsx;Test;Test.sh;Test.bat;Test.cmd;Spec.xlsx;Spec;Spec.sh;Spec.bat;Spec.cmd").split(";");
 	}
-	
+
 	private static String get(String key, String defaultValue) {
 		String systemProperyValue = System.getProperty("com.xpfriend.fixture.runner." + key);
 		if(!Strings.isEmpty(systemProperyValue)) {

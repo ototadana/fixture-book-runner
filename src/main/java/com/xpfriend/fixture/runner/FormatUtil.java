@@ -22,6 +22,13 @@ import com.xpfriend.junk.Resi;
  * @author Ototadana
  */
 class FormatUtil {
+	
+	static {
+		new FormatUtil(); // for coverage
+	}
+	
+	private FormatUtil() {
+	}
 
 	/**
 	 * 指定された文字列をフォーマットする。

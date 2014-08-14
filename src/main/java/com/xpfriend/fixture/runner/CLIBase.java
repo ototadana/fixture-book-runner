@@ -101,7 +101,7 @@ abstract class CLIBase {
 			run(writeReport, getFixtureBookRunner(parameters.get(0), parameters.get(1), parameters.get(2)));
 		} else {
 			String bookPath = parameters.get(0);
-			Book book = Book.getInstance(getClass(), bookPath);
+			Book book = getBook(bookPath);
 			if(parameters.size() == 2) {
 				String sheetName = parameters.get(1);
 				run(writeReport, bookPath, sheetName, book.getSheet(sheetName));
@@ -113,6 +113,10 @@ abstract class CLIBase {
 		if(throwable != null) {
 			throw throwable;
 		}
+	}
+	
+	protected Book getBook(String bookPath) throws IOException {
+		return Book.getInstance(getClass(), bookPath);
 	}
 
 	private void run(boolean writeReport, String bookPath, Book book) throws Exception {

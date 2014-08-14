@@ -98,8 +98,8 @@ class CommandUtilTest extends Specification {
 		CommandResult result01 = CommandUtil.execute(["testxxx.bat"], false)
 		then:
 		result01.exitCode == 1
-		result01.stdout == null
-		result01.stderr == null
+		result01.stdout == ""
+		result01.stderr == ""
 		String errText = System.err.out.toString("Shift_JIS")
 		errText.size() > 0
 
@@ -107,8 +107,8 @@ class CommandUtilTest extends Specification {
 		CommandResult result02 = CommandUtil.execute(["..\\..\\src\\test\\resources\\scripts\\test01.bat", "aaa"], false)
 		then:
 		result02.exitCode == 0
-		result02.stdout == null
-		result02.stderr == null
+		result02.stdout == ""
+		result02.stderr == ""
 		String outText = System.out.out.toString("Shift_JIS")
 		outText.size() > 0
 

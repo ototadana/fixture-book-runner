@@ -41,6 +41,13 @@ import com.xpfriend.junk.Strings;
  * @author Ototadana
  */
 class CommandUtil {
+	
+	static {
+		new CommandUtil(); // for coverage
+	}
+	
+	private CommandUtil(){
+	}
 
 	/**
 	 * 指定されたコマンドを実行する。
@@ -215,7 +222,7 @@ class CommandUtil {
 				
 		public String getText() throws UnsupportedEncodingException {
 			if(byteArray == null) {
-				return null;
+				return "";
 			} else {
 				return byteArray.toString(System.getProperty("file.encoding"));
 			}

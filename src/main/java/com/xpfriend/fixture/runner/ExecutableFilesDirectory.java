@@ -57,13 +57,13 @@ class ExecutableFilesDirectory {
 		return executableFiles;
 	}
 	
-	private Map<String, File> getExecutableFiles(File directory) {
+	private static Map<String, File> getExecutableFiles(File directory) {
 		Map<String, File> executableFiles = new TreeMap<String, File>(new FileComparator());
 		add("", directory, executableFiles);
 		return executableFiles;
 	}
 	
-	private void add(String prefix, File directory, Map<String, File> executableFiles) {
+	private static void add(String prefix, File directory, Map<String, File> executableFiles) {
 		File[] files = directory.listFiles();
 		for(File file : files) {
 			if(isIgnorable(file)) {
@@ -79,7 +79,7 @@ class ExecutableFilesDirectory {
 		}
 	}
 	
-	private boolean isIgnorable(File file) {
+	private static boolean isIgnorable(File file) {
 		for(String ignorable : IGNORABLES) {
 			if(file.getName().startsWith(ignorable)) {
 				return true;
@@ -88,11 +88,11 @@ class ExecutableFilesDirectory {
 		return false;
 	}
 	
-	private String toBaseName(String prefix, File file) {
+	private static String toBaseName(String prefix, File file) {
 		return concat(prefix, PathUtil.toBaseName(file));
 	}
 	
-	private String concat(String prefix, String suffix) {
+	private static String concat(String prefix, String suffix) {
 		if(Strings.isEmpty(prefix)) {
 			return suffix;
 		} else {
@@ -100,7 +100,7 @@ class ExecutableFilesDirectory {
 		}
 	}
 
-	private void add(Map<String, File> executableFiles, String baseName,
+	private static void add(Map<String, File> executableFiles, String baseName,
 			File file) {
 		File oldFile = executableFiles.get(baseName);
 		if(oldFile == null) {
@@ -114,7 +114,7 @@ class ExecutableFilesDirectory {
 		}
 	}
 
-	private boolean isExecutable(String baseName, File file) {
+	private static boolean isExecutable(String baseName, File file) {
 		if(!file.isFile()) {
 			return false;
 		}

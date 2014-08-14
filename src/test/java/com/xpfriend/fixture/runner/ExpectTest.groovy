@@ -18,6 +18,7 @@ package com.xpfriend.fixture.runner
 import javax.xml.bind.JAXB;
 
 import com.xpfriend.fixture.runner.junit4.Testsuite;
+import com.xpfriend.junk.ConfigException;
 import com.xpfriend.junk.Loggi;
 
 import groovy.sql.Sql;
@@ -37,6 +38,16 @@ class ExpectTest extends Specification {
 		TestUtil.cleanupSpec()
 	}
 	
+	def "引数指定がないとエラーになる"() {
+		when:
+		Expect.main([] as String[])
+
+		then:
+		ConfigException e = thrown()
+		print e
+		e.toString().indexOf("com.xpfriend.fixture.runner.Expect") > -1
+	}
+
 	def "「E取得データ」が定義されていなくても、コマンドの終了コードが0ならばエラーにならない"() {
 		setup:
 		File report = new File(Settings.getReportPath(), "ExpectTest.xml")
@@ -59,6 +70,12 @@ class ExpectTest extends Specification {
 	def "「E取得データ」でコマンドの実行結果を判定できる（正常終了のケース）"() {
 		expect:
 		Expect.main(["src/test/resources/books/ExpectTest.xlsx", "sheet1", "正常終了を想定した「E取得データ」が定義されている例"] as String[])
+		true
+	}
+	
+	def "「E取得データ」ではstdout,stderrの定義を省略できる"() {
+		expect:
+		Expect.main(["src/test/resources/books/ExpectTestEx.xlsx", "sheet1", "正常終了を想定した「E取得データ」が定義されている例"] as String[])
 		true
 	}
 	
@@ -115,6 +132,20 @@ class ExpectTest extends Specification {
 		Expect.main(["-server", "src/test/resources/books/ExpectTest.xlsx", "sheet1", "「E取得データ」が定義されておらず、かつ、コマンド実行が成功する例"] as String[])
 		then:
 		true
+		
+		when:
+		Expect.main(["-server", "src/test/resources/books/ExpectTest.xlsx", "sheet2", "「E更新後データ」でDBデータの検証ができる（不一致のケース）"] as String[])
+		then:
+		AssertionError ae = thrown()
+		println ae
+		ae.getMessage().indexOf("EMPLOYEE") > 0
+		
+		when:
+		Expect.main(["-server", "src/test/resources/books/ExpectTest.xxx", "sheet2", "「E更新後データ」でDBデータの検証ができる（不一致のケース）"] as String[])
+		then:
+		ConfigException ce = thrown()
+		println ce
+		ce.getMessage().indexOf("ExpectTest.xxx") > 0
 		
 		cleanup:
 		FixtureBookServer.stop()

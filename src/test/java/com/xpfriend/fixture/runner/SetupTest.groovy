@@ -53,6 +53,16 @@ class SetupTest extends Specification {
 		return TestUtil.initReportFile("SetupTest.xml")
 	}
 	
+	def "引数指定がないとエラーになる"() {
+		when:
+		Setup.main([] as String[])
+
+		then:
+		ConfigException e = thrown()
+		print e
+		e.toString().indexOf("com.xpfriend.fixture.runner.Setup") > -1
+	}
+
 	def "実行時のエラーはレポートファイルに出力される"() {
 		setup:
 		File report = initSetupTestXml()
@@ -114,19 +124,19 @@ class SetupTest extends Specification {
 	
 	def "オプション -server を付けるとサーバー上でFixtureBookを実行する"() {
 		when:
-		Setup.main(["src/test/resources/books/SetupTest.xlsx", "-server"] as String[])
+		Setup.main(["src/test/resources/books/SetupTest.xlsx", "-server", "-debug"] as String[])
 		then:
 		ConnectException e = thrown()
 		
 		when:
 		FixtureBookServer.start()
-		Setup.main(["src/test/resources/books/SetupTest.xlsx", "-server"] as String[])
+		Setup.main(["src/test/resources/books/SetupTest.xlsx", "-server", "-debug"] as String[])
 		then:
 		true
 		
 		cleanup:
 		FixtureBookServer.stop()
-	}	
+	}
 
 	private findAll() {
 		def list = []

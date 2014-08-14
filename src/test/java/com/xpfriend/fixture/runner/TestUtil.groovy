@@ -54,10 +54,12 @@ class TestUtil {
 		System.setProperty("com.xpfriend.fixture.runner.report", "")
 		System.setProperty("com.xpfriend.fixture.runner.directory", "")
 		System.setProperty("com.xpfriend.fixture.runner.executable", "")
+		System.setProperty("com.xpfriend.fixture.runner.output-validation", "")
 		Config.put("port", null)
 		Config.put("report", null)
 		Config.put("directory", null)
 		Config.put("executable", null)
+		Config.put("output-validation", null)
 		PathUtil.executableFiles = null
 	}
 	

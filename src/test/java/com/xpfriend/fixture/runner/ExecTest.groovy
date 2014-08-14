@@ -38,12 +38,12 @@ class ExecTest extends Specification {
 
 	def "指定されたフォルダにある実行可能ファイルを実行する（正常終了のケース）"() {
 		setup:
-		File report1 = new File(Settings.getReportPath(), "Test01Test.xml")
-		File report2 = new File(Settings.getReportPath(), "Test02Spec.xml")
-		File report3 = new File(Settings.getReportPath(), "sub1.Test03Test.xml")
+		File report1 = TestUtil.initReportFile("Test01Test.xml")
+		File report2 = TestUtil.initReportFile("Test02Spec.xml")
+		File report3 = TestUtil.initReportFile("sub1.Test03Test.xml")
 
 		when:
-		Exec.main(["src/test/resources/exec/noerror", "-debug"] as String[])
+		Exec.main(["src/test/resources/exec/noerror"] as String[])
 
 		then:
 		report1.exists() == true
@@ -84,12 +84,12 @@ class ExecTest extends Specification {
 	
 	def "指定されたフォルダにある実行可能ファイルを実行する（エラーのケース）"() {
 		setup:
-		File report1 = new File(Settings.getReportPath(), "Test04Spec.xml")
-		File report2 = new File(Settings.getReportPath(), "Test05Test.xml")
-		File report3 = new File(Settings.getReportPath(), "Test06Test.xml")
+		File report1 = TestUtil.initReportFile("Test04Spec.xml")
+		File report2 = TestUtil.initReportFile("Test05Test.xml")
+		File report3 = TestUtil.initReportFile("Test06Test.xml")
 		
 		when:
-		Exec.main(["src/test/resources/exec/error"] as String[])
+		Exec.main(["src/test/resources/exec/error", "-debug"] as String[])
 
 		then:
 		AssertionError e = thrown()
@@ -119,5 +119,23 @@ class ExecTest extends Specification {
 		suite2.testcase[4].name == "Test05Test.batの実行が正常終了すること"
 		suite2.testcase[4].failure[0].type == "java.lang.AssertionError"
 		suite2.testcase.every {it.classname == "Test05Test"} == true
+	}
+	
+	def "executeAsExecutableで実行時に例外が発生した時もレポート出力する"() {
+		setup:
+		File report = TestUtil.initReportFile("ExecTest001.xml")
+		
+		when:
+		Exec exec = new Exec("src/test/resources/exec/error")
+		exec.executeAsExecutable(new File("xxx"), "ExecTest001")
+		then:
+		IOException e = thrown()
+		print e
+		report.exists() == true
+		Testsuite suite = JAXB.unmarshal(report, Testsuite)
+		suite.errors == "1"
+		suite.tests == "1"
+		suite.testcase.size() == 1
+		suite.testcase[0].error[0].type == "java.io.IOException"
 	}
 }

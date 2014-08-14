@@ -45,7 +45,7 @@ class Expect extends CLIBase {
 	protected void execute(FixtureBookRunner runner) throws Exception,
 			AssertionError {
 		List<String> command = runner.setupAndGetCommand();
-		CommandResult result = CommandUtil.execute(command, true);
+		CommandResult result = CommandUtil.execute(command, runner.isRequiredOutputValidation());
 		runner.validateCommandResultAndStorage(result);
 	}
 

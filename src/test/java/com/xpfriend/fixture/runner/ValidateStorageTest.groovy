@@ -18,6 +18,7 @@ package com.xpfriend.fixture.runner
 import javax.xml.bind.JAXB;
 
 import com.xpfriend.fixture.runner.junit4.Testsuite;
+import com.xpfriend.junk.ConfigException;
 
 import groovy.sql.Sql;
 import spock.lang.Specification
@@ -50,12 +51,26 @@ class ValidateStorageTest extends Specification {
 		return TestUtil.initReportFile("ValidateStorageTest.xml")
 	}
 	
+	def setupTable() {
+		sql.execute("delete from EMPLOYEE")
+		sql.execute("insert into EMPLOYEE(ID,NAME,AGE) VALUES(1,'aa',10)")
+	}
+	
+	def "引数指定がないとエラーになる"() {
+		when:
+		ValidateStorage.main([] as String[])
+
+		then:
+		ConfigException e = thrown()
+		print e
+		e.toString().indexOf("com.xpfriend.fixture.runner.ValidateStorage") > -1
+	}
+
 	def "Excelファイル名、シート名、テストケース名を指定して実行できる"() {
 		setup:
 		File report = initValidateStorageTestXml()
-		sql.execute("delete from EMPLOYEE")
-		sql.execute("insert into EMPLOYEE(ID,NAME,AGE) VALUES(1,'aa',10)")
-		
+		setupTable()
+
 		when:
 		ValidateStorage.main(["src/test/resources/books/ValidateStorageTest.xlsx", "sheet1", "「E更新後データ」でDBデータの検証ができる（1）"] as String[])
 
@@ -69,8 +84,7 @@ class ValidateStorageTest extends Specification {
 	def "Excelファイル名、シート名を指定して実行できる"() {
 		setup:
 		File report = initValidateStorageTestXml()
-		sql.execute("delete from EMPLOYEE")
-		sql.execute("insert into EMPLOYEE(ID,NAME,AGE) VALUES(1,'aa',10)")
+		setupTable()
 		
 		when:
 		ValidateStorage.main(["src/test/resources/books/ValidateStorageTest.xlsx", "sheet1"] as String[])
@@ -86,8 +100,7 @@ class ValidateStorageTest extends Specification {
 	def "Excelファイル名を指定して実行できる"() {
 		setup:
 		File report = initValidateStorageTestXml()
-		sql.execute("delete from EMPLOYEE")
-		sql.execute("insert into EMPLOYEE(ID,NAME,AGE) VALUES(1,'aa',10)")
+		setupTable()
 		
 		when:
 		ValidateStorage.main(["src/test/resources/books/ValidateStorageTest.xlsx"] as String[])
@@ -134,4 +147,23 @@ class ValidateStorageTest extends Specification {
 		println suite.testcase[0].failure[0].message.startsWith("9行目で列AGEに指定された予想結果は")
 	}
 	
+	def "オプション -server を付けるとサーバー上でFixtureBookを実行する"() {
+		setup:
+		setupTable()
+
+		when:
+		ValidateStorage.main(["src/test/resources/books/ValidateStorageTest.xlsx", "-server"] as String[])
+		then:
+		ConnectException e = thrown()
+		
+		when:
+		FixtureBookServer.start()
+		ValidateStorage.main(["src/test/resources/books/ValidateStorageTest.xlsx", "-server"] as String[])
+		then:
+		true
+		
+		cleanup:
+		FixtureBookServer.stop()
+	}	
+
 }

@@ -13,35 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.xpfriend.fixture.runner;
+package com.xpfriend.fixture.runner
 
-import com.xpfriend.junk.Loggi;
+import spock.lang.Specification;
 
 /**
- * デバッグモード切り替えユーティリティ。
+ * CommandResult のテスト。
  * @author Ototadana
  */
-class DebugUtil {
-	
-	static {
-		new DebugUtil(); // for coverage
-	}
-	
-	private DebugUtil() {
-	}
-	
-	/**
-	 * デバッグモードに設定する。
-	 */
-	public static void setDebugEnabled() {
-		Loggi.setDebugEnabled(true);
-	}
+class CommandResultTest extends Specification {
 
-	/**
-	 * デバッグモードに設定されているかどうかを調べる
-	 * @return デバッグモードに設定されている場合は true。
-	 */
-	public static boolean isDebugEnabled() {
-		return Loggi.isDebugEnabled();
-	}	
+	def "toStringはプロパティの値を返す"() {
+		when:
+		CommandResult result = new CommandResult(exitCode:1, stderr:"e", stdout:"o")
+		
+		then:
+		result.toString() == "exitCode:1, stdout:o, stderr:e"
+	}
 }

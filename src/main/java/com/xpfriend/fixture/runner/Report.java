@@ -92,14 +92,6 @@ class Report {
 	}
 
 	/**
-	 * 現在出力対象としているテストケースがサマリーテストケースかどうかを調べる。
-	 * @return サマリーテストケースならば true。
-	 */
-	public boolean isSummary() {
-		return summary;
-	}
-		
-	/**
 	 * 結果レポートをファイル出力する。
 	 * @param e テストで発生した例外。
 	 */

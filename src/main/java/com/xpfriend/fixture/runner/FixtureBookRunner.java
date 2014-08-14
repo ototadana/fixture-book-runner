@@ -20,10 +20,13 @@ import java.util.List;
 
 import com.xpfriend.fixture.staff.Book;
 import com.xpfriend.fixture.staff.Case;
+import com.xpfriend.fixture.staff.Column;
 import com.xpfriend.fixture.staff.Section;
 import com.xpfriend.fixture.staff.Section.SectionType;
 import com.xpfriend.fixture.staff.Sheet;
+import com.xpfriend.fixture.staff.Table;
 import com.xpfriend.junk.Loggi;
+import com.xpfriend.junk.Strings;
 
 /**
  * FixtureBook の実行処理。
@@ -123,8 +126,8 @@ class FixtureBookRunner {
 	}
 
 	private String convertLineSeparator(String text) {
-		if(text == null) {
-			return null;
+		if(Strings.isEmpty(text)) {
+			return text;
 		}
 		return text.replace("\r\n", "\n");
 	}
@@ -135,5 +138,27 @@ class FixtureBookRunner {
 		Case testCase = sheet.getCase(testCaseName);
 		Loggi.debug("FixtureBook : Case : " + testCase);
 		return testCase;
+	}
+
+	public boolean isRequiredOutputValidation() throws IOException {
+		Case testCase = getTestCase(bookPath, sheetName, testCaseName);
+		Section section = testCase.getSection(SectionType.EXPECTED_RESULT);
+		if(section == null) {
+			return false;
+		}
+		List<String> tableNames = section.getTableNames();
+		if(tableNames.isEmpty()) {
+			return false;
+		}
+		Table table = section.getTable(tableNames.get(0));
+		for(Column column : table.getColumns()) {
+			if(column != null) {
+				String name = column.getName();
+				if("stdout".equalsIgnoreCase(name) || "stderr".equalsIgnoreCase(name)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }

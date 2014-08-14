@@ -162,6 +162,11 @@ class ReportTest extends Specification {
 		reportFile.exists() == false
 	}
 	
+	def "getFirstLineはException.getMessageがnullを返す際にtoStringで代替する"() {
+		expect:
+		new Report("a","a","a").getFirstLine(new Exception()) == "java.lang.Exception"
+	}
+	
 	private long toLong(String time) {
 		return (long)(Double.parseDouble(time) * 1000);
 	}

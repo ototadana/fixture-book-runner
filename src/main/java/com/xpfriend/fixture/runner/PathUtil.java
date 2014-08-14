@@ -22,6 +22,13 @@ import java.io.File;
  * @author Ototadana
  */
 class PathUtil {
+	
+	static {
+		new PathUtil(); // for coverage
+	}
+	
+	private PathUtil() {
+	}
 
 	private static File reportDirectory;
 	private static String[] executableFiles;

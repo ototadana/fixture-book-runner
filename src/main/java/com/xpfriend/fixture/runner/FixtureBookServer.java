@@ -88,9 +88,9 @@ class FixtureBookServer extends FixtureBookRunner {
 	public void validateCommandResultAndStorage(CommandResult result) throws IOException,
 			AssertionError {
 		Connection connection = getConnectionInternal(VALIDATE_EXIT_CODE_AND_STORAGE)
-				.data(EXIT_CODE, String.valueOf(result.getExitCode()))
-				.data(STDOUT, result.getStdout())
-				.data(STDERR, result.getStderr());
+				.data(EXIT_CODE, encode(String.valueOf(result.getExitCode())))
+				.data(STDOUT, encode(result.getStdout()))
+				.data(STDERR, encode(result.getStderr()));
 		execute(connection);
 	}
 
@@ -101,9 +101,9 @@ class FixtureBookServer extends FixtureBookRunner {
 	
 	private Connection getConnectionInternal(String method) throws IOException {
 		return getConnection(method)
-				.data(BOOK, URLEncoder.encode(bookPath, CHARSET))
-				.data(SHEET, URLEncoder.encode(sheetName, CHARSET))
-				.data(CASE, URLEncoder.encode(testCaseName, CHARSET));
+				.data(BOOK, encode(bookPath))
+				.data(SHEET, encode(sheetName))
+				.data(CASE, encode(testCaseName));
 	}
 	
 	private static String execute(Connection connection) throws IOException, AssertionError {
@@ -164,9 +164,9 @@ class FixtureBookServer extends FixtureBookRunner {
 					return toString(runner.setupAndGetCommand());
 				} else if(("/" + VALIDATE_EXIT_CODE_AND_STORAGE).equals(path)) {
 					CommandResult result = new CommandResult();
-					result.setExitCode(Integer.parseInt(baseRequest.getParameter(EXIT_CODE)));
-					result.setStdout(baseRequest.getParameter(STDOUT));
-					result.setStderr(baseRequest.getParameter(STDERR));
+					result.setExitCode(Integer.parseInt(decode(baseRequest.getParameter(EXIT_CODE))));
+					result.setStdout(decode(baseRequest.getParameter(STDOUT)));
+					result.setStderr(decode(baseRequest.getParameter(STDERR)));
 					runner.validateCommandResultAndStorage(result);
 				} else { //if(("/" + VALIDATE_STORAGE).equals(path)) {
 					runner.validateStorage();
@@ -188,6 +188,13 @@ class FixtureBookServer extends FixtureBookRunner {
 		server.start();
 	}
 	
+	private static String encode(String text) throws UnsupportedEncodingException {
+		if(Strings.isEmpty(text)) {
+			return text;
+		} else {
+			return URLEncoder.encode(text, CHARSET);
+		}
+	}
 	private static String decode(String text) throws UnsupportedEncodingException {
 		if(Strings.isEmpty(text)) {
 			return text;

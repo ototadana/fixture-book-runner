@@ -15,6 +15,9 @@
  */
 package com.xpfriend.fixture.runner
 
+import java.io.File;
+import java.util.Map;
+
 import com.xpfriend.junk.Config;
 
 import spock.lang.Specification
@@ -96,6 +99,22 @@ class ExecutableFilesDirectoryTest extends Specification {
 		files = getExecutableFiles("src/test/resources/executables/")
 		then:
 		files == ["Test3Test.xlsx", "test5Test.cmd", "Test1Test.bat"]
+	}
+	
+	def "addメソッドはExcelファイルよりもスクリプトファイルの方を優先する"() {
+		when:
+		Map<String, File> executableFiles1 = new HashMap<String, File>()
+		executableFiles1.put("aaa", new File("aaa.xlsx"))
+		ExecutableFilesDirectory.add(executableFiles1, "aaa", new File("aaa.sh"))
+		then:
+		executableFiles1 == ["aaa":new File("aaa.sh")]
+		
+		when:
+		Map<String, File> executableFiles2 = new HashMap<String, File>()
+		executableFiles2.put("aaa", new File("aaa.sh"))
+		ExecutableFilesDirectory.add(executableFiles2, "aaa", new File("aaa.xlsx"))
+		then:
+		executableFiles2 == ["aaa":new File("aaa.sh")]
 	}
 	
 	private List<String> getExecutableFiles(String path) {
