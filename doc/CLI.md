@@ -1,10 +1,10 @@
 CLI リファレンス
 ================
 
-*   [Exec](#Exec)
-*   [Expect](#Expect)
-*   [Setup](#Setup)
-*   [ValidateStorage](#ValidateStorage)
+*   [Exec](#exec)
+*   [Expect](#expect)
+*   [Setup](#setup)
+*   [ValidateStorage](#validatestorage)
 
 
 Exec
