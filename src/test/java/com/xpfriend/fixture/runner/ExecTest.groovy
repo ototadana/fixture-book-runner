@@ -138,4 +138,14 @@ class ExecTest extends Specification {
 		suite.testcase.size() == 1
 		suite.testcase[0].error[0].type == "java.io.IOException"
 	}
+
+	def "Execコンストラクタの引数がディレクトリでない場合ConfigExceptionが発生する"() {
+		setup:
+		print CLIBase
+		when:
+		Exec exec = new Exec("-")
+		then:
+		ConfigException e = thrown()
+		e.toString().indexOf("-") > -1
+	}
 }

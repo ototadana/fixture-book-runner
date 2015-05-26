@@ -4,7 +4,7 @@
 
   <groupId>com.xpfriend</groupId>
   <artifactId>fixture-book-runner</artifactId>
-  <version>1.0</version>
+  <version>1.1</version>
   <packaging>jar</packaging>
 
   <name>FixtureBookRunner</name>

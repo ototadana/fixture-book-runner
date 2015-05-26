@@ -11,7 +11,7 @@ FixtureBookRunner
 
 ダウンロード
 ------------
-*   <http://xpfriend.com/fixture-book/fixture-book-runner-1.0.zip>
+*   <http://xpfriend.com/fixture-book/fixture-book-runner-1.1.zip>
 
 
 必須ソフトウェア

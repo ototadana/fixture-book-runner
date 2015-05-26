@@ -15,13 +15,13 @@ FixtureBookRunner - Unix 環境でのセットアップ
     ```
 
 2.  展開すると **fixture-book** という名前のフォルダができるので、
-    その中にある **testtest** スクリプトに実行権を付与する。
+    その中にある **testexec** スクリプトに実行権を付与する。
 
     ```bash
-    chmod +x fixture-book/testtest
+    chmod +x fixture-book/testexec
     ```
 
-3.  testtest スクリプトを任意のフォルダから実行できるようにするため、
+3.  testexec スクリプトを任意のフォルダから実行できるようにするため、
     環境変数 **PATH** に **fixture-book** を追加する。
 
     **~/** に展開した場合の例:
@@ -33,8 +33,8 @@ FixtureBookRunner - Unix 環境でのセットアップ
 ### (参考) fixture-book フォルダ構成
 
       ─fixture-book/
-        │  testtest                ... テスト実行用スクリプト(Unix用)
-        │  testtest.bat            ... テスト実行用バッチファイル(Windows用)
+        │  testexec                ... テスト実行用スクリプト(Unix用)
+        │  testexec.bat            ... テスト実行用バッチファイル(Windows用)
         │  *-unix-example.zip      ... Unix環境用サンプル
         │  *-windows-example.zip   ... Windows環境用サンプル
         │
@@ -76,11 +76,11 @@ fixture-book/*-unix-example.zip は、Unix環境用テストサンプルです�
     chmod +x fixture-book-example/app-test/tests/*
     ```
 
-3.  テスト実行環境に移動して、`testtest` コマンドを実行する。
+3.  テスト実行環境に移動して、`testexec` コマンドを実行する。
 
     ```bash
     cd fixture-book-example/app-test
-    testtest
+    testexec
     ```
 
 4.  実行終了すると **reports** フォルダにテスト結果レポート(XMLファイル)

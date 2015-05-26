@@ -20,6 +20,7 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
 
+import com.xpfriend.junk.ConfigException;
 import com.xpfriend.junk.Strings;
 
 /**
@@ -46,7 +47,13 @@ class ExecutableFilesDirectory {
 	 * @param path　実行可能なファイルを格納するディレクトリのパス。
 	 */
 	public ExecutableFilesDirectory(String path) {
-		this.executableFiles = getExecutableFiles(new File(path).getAbsoluteFile());
+		File directory = new File(path);
+		if(!directory.isDirectory()) {
+			throw new ConfigException(
+					"M_FixtureBookRunner_ExecutableFilesDirectory_Not_Directory",
+					directory.getAbsolutePath());
+		}
+		this.executableFiles = getExecutableFiles(directory.getAbsoluteFile());
 	}
 
 	/**

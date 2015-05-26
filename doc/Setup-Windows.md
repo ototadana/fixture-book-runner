@@ -10,14 +10,14 @@ FixtureBookRunner - Windows 環境でのセットアップ
 ------------
 1.  ダウンロードした zip ファイルを任意の場所に展開する。
 2.  展開すると **fixture-book** という名前のフォルダができるので、
-    その中にある **testtest.bat** を任意のフォルダから実行できるようにするため、
+    その中にある **testexec.bat** を任意のフォルダから実行できるようにするため、
     環境変数 **PATH** に **fixture-book** を追加する。
 
 ### (参考) fixture-book フォルダ構成
 
       ─fixture-book/
-        │  testtest.bat            ... テスト実行用バッチファイル(Windows用)
-        │  testtest                ... テスト実行用スクリプト(Unix用)
+        │  testexec.bat            ... テスト実行用バッチファイル(Windows用)
+        │  testexec                ... テスト実行用スクリプト(Unix用)
         │  *-windows-example.zip   ... Windows環境用サンプル
         │  *-unix-example.zip      ... Unix環境用サンプル
         │
@@ -46,11 +46,11 @@ fixture-book\*-window-example.zip は、Window環境用テストサンプルで�
                 ├── reports/         ... テスト結果レポート
                 └── tests/           ... テスト実行用ファイル（バッチファイル、Excelファイル）
 
-2.  テスト実行環境に移動して、`testtest` コマンドを実行する。
+2.  テスト実行環境に移動して、`testexec` コマンドを実行する。
 
     ```bat
     cd fixture-book-example\app-test
-    testtest
+    testexec
     ```
 
 3.  実行終了すると **reports** フォルダにテスト結果レポート(XMLファイル)
